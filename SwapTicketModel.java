@@ -1,12 +1,11 @@
 package com.derivatives.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class SwapTicketModel {
 
-	boolean scheduleEventWork;	
-	
+	boolean scheduleEventWork;
+
 	public boolean isScheduleEventWork() {
 		return scheduleEventWork;
 	}
@@ -14,22 +13,19 @@ public class SwapTicketModel {
 	public void setScheduleEventWork(boolean scheduleEventWork) {
 		this.scheduleEventWork = scheduleEventWork;
 	}
-	
-	
-	static long noOfDays;
 
-	public static long getNoOfDays() {
+	long noOfDays;
+
+	public long getNoOfDays() {
 		return noOfDays;
 	}
 
-	public static void setNoOfDays(long noOfDays) {
-		SwapTicketModel.noOfDays = noOfDays;
+	public void setNoOfDays(long noOfDays) {
+		this.noOfDays = noOfDays;
 	}
 
-	
-
 	String txtModStatus;
-	
+
 	public String getTxtModStatus() {
 		return txtModStatus;
 	}
@@ -37,50 +33,42 @@ public class SwapTicketModel {
 	public void setTxtModStatus(String txtModStatus) {
 		this.txtModStatus = txtModStatus;
 	}
-	
-	
 
-	//static int tenor=3;//remove value later
-	static int tenor;
+	// static int tenor=3;//remove value later
+	  int tenor; 
 
-	public static int getTenor() {
+	public int getTenor() {
 		return tenor;
 	}
 
 	public void setTenor(int tenor) {
-		SwapTicketModel.tenor = tenor;
+		this.tenor = tenor;
 	}
 
-	
-	//static Long notional=10000000l;//remove value later
-	static Long notional;  
+	  Long notional;
+ 
 
-	public static Long getNotional() {
+	public Long getNotional() {
 		return notional;
 	}
 
-	public static void setNotional(Long notional) {
-		SwapTicketModel.notional = notional;
+	public void setNotional(Long notional) {
+		this.notional = notional;
 	}
 
-	
- 
-	
-	
-	
-	static String accrualFrequency ;//remove value later
+	  String accrualFrequency;
 
-	public static String getAccrualFrequency() {
+	public   String getAccrualFrequency() {
 		return accrualFrequency;
 	}
 
-	public static void setAccrualFrequency(String accrualFrequency) {
-		SwapTicketModel.accrualFrequency = accrualFrequency;
+	public   void setAccrualFrequency(String accrualFrequency) {
+		getModelInstance().accrualFrequency = accrualFrequency;
 
 		switch (accrualFrequency) {
 
 		case "Semiannual":
-			SwapTicketModel.convertedAccrualFrequency = 6;
+			getModelInstance().convertedAccrualFrequency = 6;
 
 			/*
 			 * case "Annual": this.convertedAccrualFrequency = 12;
@@ -99,42 +87,43 @@ public class SwapTicketModel {
 		}
 	}
 
-	static int convertedAccrualFrequency;
+	  int convertedAccrualFrequency;
 
-	public static int getConvertedAccrualFrequency() {
+	 
+
+	public int getConvertedAccrualFrequency() {
 		return convertedAccrualFrequency;
 	}
 
-	public static void setConvertedAccrualFrequency(int convertedAccrualFrequency) {
-		SwapTicketModel.convertedAccrualFrequency = convertedAccrualFrequency;
+	public void setConvertedAccrualFrequency(int convertedAccrualFrequency) {
+		this.convertedAccrualFrequency = convertedAccrualFrequency;
 	}
 
-	
-	
-	static double DBdefaultFixedQuote;
-	
-	public static double getDBdefaultFixedQuote() {
+	  double DBdefaultFixedQuote;
+
+	 
+
+	public double getDBdefaultFixedQuote() {
 		return DBdefaultFixedQuote;
 	}
 
-	public static void setDBdefaultFixedQuote(double dBdefaultFixedQuote) {
-		DBdefaultFixedQuote = dBdefaultFixedQuote*0.01;
+	public void setDBdefaultFixedQuote(double dBdefaultFixedQuote) {
+		DBdefaultFixedQuote = dBdefaultFixedQuote;
 	}
 
+	// static double FixedQuote=1;//remove value later
+	  double FixedQuote;
 
-	//static double FixedQuote=1;//remove value later
-	static double FixedQuote;
-
-	public static double getFixedQuote() {
+	public   double getFixedQuote() {
 		return FixedQuote;
 	}
 
-	public static void setFixedQuote(double fixedQuote) {
+	public   void setFixedQuote(double fixedQuote) {
 		if (fixedQuote < 0) {
-			SwapTicketModel.FixedQuote = (-1 * fixedQuote) * 0.01;
+			getModelInstance().FixedQuote = (-1 * fixedQuote) * 0.01;
 
 		} else {
-			SwapTicketModel.FixedQuote = fixedQuote * 0.01;
+			getModelInstance().FixedQuote = fixedQuote * 0.01;
 		}
 	}
 
@@ -148,7 +137,7 @@ public class SwapTicketModel {
 		this.convertedDayCount = convertedDayCount;
 	}
 
-	//String dayCount="Act/360";//remove value later
+	// String dayCount="Act/360";//remove value later
 	String dayCount;
 
 	public String getDayCount() {
@@ -167,22 +156,39 @@ public class SwapTicketModel {
 	double totalPvAmount;
 	double totalPaymentAmount;
 	double cashFlow;
-	
-	
-	//static String startDate="27/9/2013";// remove this later
-	static String startDate;
-	static LocalDate convertedstartDate;
 
-	public static LocalDate getConvertedstartDate() {
+ 
+	  String startDate;
+	  
+	  
+	public String getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+
+	  LocalDate convertedstartDate;
+
+	public   LocalDate getConvertedstartDate() {
 		return convertedstartDate;
 	}
 
-	public static void setConvertedstartDate(LocalDate convertedstartDate) {
-		SwapTicketModel.convertedstartDate = convertedstartDate;
+	public   void setConvertedstartDate(LocalDate convertedstartDate) {
+		getModelInstance().convertedstartDate = convertedstartDate;
 	}
 
-	//static String endDate="16/9/2016";
-	static String endDate;
+	// static String endDate="16/9/2016";
+	  String endDate;
+	  
+	  public String getEndDate() {
+			return endDate;
+		}
+
+		public static void setEndDate(String endDate) {
+			getModelInstance().endDate = endDate;
+		}
 	LocalDate convertedendDate;
 
 	public LocalDate getConvertedendDate() {
@@ -192,8 +198,6 @@ public class SwapTicketModel {
 	public void setConvertedendDate(LocalDate convertedendDate) {
 		this.convertedendDate = convertedendDate;
 	}
-
-	
 
 	public double getTotalPvAmount() {
 		return totalPvAmount;
@@ -219,21 +223,19 @@ public class SwapTicketModel {
 		this.cashFlow = cashFlow;
 	}
 
-	public static String getStartDate() {
-		return startDate;
+	 
+
+	
+
+	/* creating singleton object */
+	static SwapTicketModel swapTicketModelObject = new SwapTicketModel();
+
+	private SwapTicketModel() {
+
 	}
 
-	public static void setStartDate(String startDate) {
-		SwapTicketModel.startDate = startDate;
-
-	}
-
-	public String getEndDate() {
-		return endDate;
-	}
-
-	public static void setEndDate(String endDate) {
-		SwapTicketModel.endDate = endDate;
+	public static SwapTicketModel getModelInstance() {
+		return swapTicketModelObject;
 	}
 
 }

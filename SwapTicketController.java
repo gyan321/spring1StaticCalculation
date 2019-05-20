@@ -12,7 +12,7 @@ public class SwapTicketController {
 	public static void main(String[] args) {
 		
 		
-		//remove comment later
+		 
 		 SwapTicketPay stp=new SwapTicketPay();
 		stp.swapticketpay();
 		
@@ -30,13 +30,14 @@ public class SwapTicketController {
 		 
 		SwapTicketFixed swapTicketFixedObject=new SwapTicketFixed();
 		SwapTicketFloat swapTicketFloatObject=new SwapTicketFloat();
+		SwapTicketModel swapTicketModelObject = SwapTicketModel.getModelInstance();
 		
 
 		/*
 		 * @ calling method to change the given start date into executable formate
 		 * 
 		 */
-	 	swapTicketFixedObject.FixedchangeStartDateFormat(SwapTicketModel.getStartDate()); 
+	 	swapTicketFixedObject.FixedchangeStartDateFormat(swapTicketModelObject.getStartDate()); 
 		
 		
 		/*
@@ -61,7 +62,7 @@ public class SwapTicketController {
 		 * @ calling method to change the given start date into executable formate
 		 * 
 		 */
-		 swapTicketFloatObject.FloatchangeStartDateFormat(SwapTicketModel.getStartDate());
+		 swapTicketFloatObject.FloatchangeStartDateFormat(swapTicketModelObject.getStartDate());
 
 		/*
 		 * @ calling  SwapTicketLoad() method to preset

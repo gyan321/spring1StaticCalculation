@@ -14,7 +14,7 @@ package com.derivatives.swapticket;
 
 	public class SwapTicketFloat {
 		String htmlxtModStatus = "loaded"; 
-		SwapTicketModel swapTicketModelObject = new SwapTicketModel();
+		SwapTicketModel swapTicketModelObject = SwapTicketModel.getModelInstance();
 
 		/*
 		 * @formating start date values
@@ -22,7 +22,7 @@ package com.derivatives.swapticket;
 		 */
 		public void FloatchangeStartDateFormat(String startDate) {
 			try {
-				SwapTicketModel.setConvertedstartDate(LocalDate.parse(dateFormatProcess(startDate)));
+				swapTicketModelObject.setConvertedstartDate(LocalDate.parse(dateFormatProcess(startDate)));
 			} catch (ParseException exception) {
 				exception.printStackTrace();
 			}
@@ -62,7 +62,7 @@ package com.derivatives.swapticket;
 		public void countingNoOfDays(LocalDate randomStartDate, LocalDate randomEndDate) { 
 
 			// calculating number of days in between
-			SwapTicketModel.setNoOfDays(ChronoUnit.DAYS.between(randomStartDate, randomEndDate));
+			swapTicketModelObject.setNoOfDays(ChronoUnit.DAYS.between(randomStartDate, randomEndDate));
 
 		}
 		
@@ -72,10 +72,10 @@ package com.derivatives.swapticket;
 		 * @ AccrualFrequency
 		 * 
 		 */
-		LocalDate randomStartDate = SwapTicketModel.getConvertedstartDate();
+		LocalDate randomStartDate = swapTicketModelObject.getConvertedstartDate();
 
 		public LocalDate nextDate(LocalDate randomStartDate) {
-			return randomStartDate.plusMonths(SwapTicketModel.getConvertedAccrualFrequency());
+			return randomStartDate.plusMonths(swapTicketModelObject.getConvertedAccrualFrequency());
 			// return randomStartDate.plusMonths(6);
 		}
 
@@ -91,6 +91,16 @@ package com.derivatives.swapticket;
 			return formattedDate2; 
 		}
 		
+		
+		/*
+		 * @method to be executed where roundingOff a calculated value is required.
+		 * 
+		 */
+		public static double  RoundingOff(double anyCalulatedValue)
+		{
+			double roundOffValued = (double) Math.round(anyCalulatedValue * 10000d) / 10000d;
+			return roundOffValued; 
+		}
 		
 		
 		/*
@@ -118,9 +128,9 @@ package com.derivatives.swapticket;
 					System.out.println("PV Calculation on PAY side for float FixedQuote rate");
 					System.out.println("-------------------------------------------------");
 
-					System.out.println("Tenor :" + SwapTicketModel.getTenor());
+					System.out.println("Tenor :" + swapTicketModelObject.getTenor());
 
-					System.out.println("AccuralFrequency :" + SwapTicketModel.getAccrualFrequency()+"\n");
+					System.out.println("AccuralFrequency :" + swapTicketModelObject.getAccrualFrequency()+"\n");
 					
 					
 					/*
@@ -130,35 +140,35 @@ package com.derivatives.swapticket;
 					System.out.println("first compounding:");
 					System.out.println("--------------------");
 					//System.out.println("couponStartDate :" + SwapTicketModel.getConvertedstartDate());
-					System.out.println("couponStartDate :" + requiredDateFormat(SwapTicketModel.getConvertedstartDate()));
-					SwapTicketModel.setAccrualFrequency(SwapTicketModel.getAccrualFrequency());
+					System.out.println("couponStartDate :" + requiredDateFormat(swapTicketModelObject.getConvertedstartDate()));
+					swapTicketModelObject.setAccrualFrequency(swapTicketModelObject.getAccrualFrequency());
 
-					LocalDate firstNextDate = nextDate(SwapTicketModel.getConvertedstartDate());
+					LocalDate firstNextDate = nextDate(swapTicketModelObject.getConvertedstartDate());
 					System.out.println("couponEndDate :" + requiredDateFormat(firstNextDate));  
 					
-					System.out.println("Notional:" + SwapTicketModel.getNotional());
+					System.out.println("Notional:" + swapTicketModelObject.getNotional());
 					 
-					SwapTicketModel.setDBdefaultFixedQuote(1.25);
-					System.out.println("periodRate:" + SwapTicketModel.getDBdefaultFixedQuote());
+					swapTicketModelObject.setDBdefaultFixedQuote(1.25);
+					System.out.println("periodRate:" +SwapTicketFloat.RoundingOff(swapTicketModelObject.getDBdefaultFixedQuote()) );
 
 					// int firstDaysCount = 181;
-					countingNoOfDays(SwapTicketModel.getConvertedstartDate(), firstNextDate);
-					System.out.println("number of days between:"+SwapTicketModel.getNoOfDays());
+					countingNoOfDays(swapTicketModelObject.getConvertedstartDate(), firstNextDate);
+					System.out.println("number of days between:"+swapTicketModelObject.getNoOfDays());
 
-					double DCF1 = ((double) SwapTicketModel.getNoOfDays() / (double) 360);
+					double DCF1 = ((double) swapTicketModelObject.getNoOfDays() / (double) 360);
 
-					double modifiedDCF1 = (double) Math.round(DCF1 * 100000d) / 100000d;
+					double modifiedDCF1 = SwapTicketFloat.RoundingOff(DCF1);
 					System.out.println("dcf:" + modifiedDCF1);
                      
 					
-					double cashFlow1 = SwapTicketModel.getNotional() * SwapTicketModel.getFixedQuote() * DCF1;
-					System.out.println("cashFlow: " + cashFlow1);
+					double cashFlow1 = swapTicketModelObject.getNotional() * swapTicketModelObject.getFixedQuote() * DCF1;
+					System.out.println("cashFlow: " + SwapTicketFloat.RoundingOff(cashFlow1));
 
-					double Zcdf1 = Math.exp(-1 * DCF1 * SwapTicketModel.getFixedQuote());
+					double Zcdf1 = Math.exp(-1 * DCF1 * swapTicketModelObject.getFixedQuote());
 					System.out.println("Zcdf: " + Zcdf1);
 
 					double PV1 = Math.round((cashFlow1 * Zcdf1) * 100d) / 100d;
-					System.out.println("first PV: " + PV1 + "\n");
+					System.out.println("first PV: " + SwapTicketFloat.RoundingOff(PV1) + "\n");
 					
 					
 					
@@ -173,28 +183,28 @@ package com.derivatives.swapticket;
 					System.out.println("couponStartDate :" +requiredDateFormat(firstNextDate));
 
 					System.out.println("couponEndDate :" + requiredDateFormat(secondNextDate));
-					System.out.println("Notional:" + SwapTicketModel.getNotional());
+					System.out.println("Notional:" + swapTicketModelObject.getNotional());
 					
-					SwapTicketModel.setDBdefaultFixedQuote(1);
-					System.out.println("periodRate:" + SwapTicketModel.getDBdefaultFixedQuote());
+					swapTicketModelObject.setDBdefaultFixedQuote(1);
+					System.out.println("periodRate:" +SwapTicketFloat.RoundingOff(swapTicketModelObject.getDBdefaultFixedQuote()));
 
 					// int secondDaysCount = 186;
 					countingNoOfDays(firstNextDate, secondNextDate);
-					System.out.println("number of days between:"+SwapTicketModel.getNoOfDays());
+					System.out.println("number of days between:"+swapTicketModelObject.getNoOfDays());
 
-					double DCF2 = ((double) SwapTicketModel.getNoOfDays() / (double) 360);
+					double DCF2 = ((double) swapTicketModelObject.getNoOfDays() / (double) 360);
 					
-					double d2 = (double) Math.round(DCF2 * 100000d) / 100000d;
+					double d2 = SwapTicketFloat.RoundingOff(DCF2);
 					System.out.println("dcf:" + d2);
 
-					double cashFlow2 = SwapTicketModel.getNotional() * SwapTicketModel.getFixedQuote() * DCF2;
-					System.out.println("cashFlow: " + cashFlow2);
+					double cashFlow2 = swapTicketModelObject.getNotional() * swapTicketModelObject.getFixedQuote() * DCF2;
+					System.out.println("cashFlow: " + SwapTicketFloat.RoundingOff(cashFlow2));
 
-					double Zcdf2 = Math.exp(-1 * DCF2 * SwapTicketModel.getFixedQuote());
+					double Zcdf2 = Math.exp(-1 * DCF2 * swapTicketModelObject.getFixedQuote());
 					System.out.println("Zcdf: " + Zcdf2);
 
 					double PV2 = Math.round((cashFlow1 * Zcdf2) * 100d) / 100d;
-					System.out.println("second PV: " + PV2 + "\n");
+					System.out.println("second PV: " +  SwapTicketFloat.RoundingOff(PV2) + "\n");
 					
 					
 					
@@ -207,27 +217,27 @@ package com.derivatives.swapticket;
 					System.out.println("couponStartDate :" + requiredDateFormat(secondNextDate));
 					LocalDate thirdNextDate = nextDate(secondNextDate);
 					System.out.println("couponEndDate :" + requiredDateFormat(thirdNextDate));
-					System.out.println("Notional:" + SwapTicketModel.getNotional());
-					SwapTicketModel.setDBdefaultFixedQuote(1.8);
-					System.out.println("periodRate:" + SwapTicketModel.getDBdefaultFixedQuote());
+					System.out.println("Notional:" + swapTicketModelObject.getNotional());
+					swapTicketModelObject.setDBdefaultFixedQuote(1.8);
+					System.out.println("periodRate:" +SwapTicketFloat.RoundingOff(swapTicketModelObject.getDBdefaultFixedQuote()));
 
 					// int thirdDaysCount = 179;
 					countingNoOfDays(secondNextDate, thirdNextDate);
-					System.out.println("number of days between:"+SwapTicketModel.getNoOfDays());
+					System.out.println("number of days between:"+swapTicketModelObject.getNoOfDays());
 
-					double DCF3 = ((double) SwapTicketModel.getNoOfDays() / (double) 360);
+					double DCF3 = ((double) swapTicketModelObject.getNoOfDays() / (double) 360);
 
-					double d3 = (double) Math.round(DCF3 * 100000d) / 100000d;
+					double d3 = SwapTicketFloat.RoundingOff(DCF3);
 					System.out.println("dcf:" + d3);
 
-					double cashFlow3 = SwapTicketModel.getNotional() * SwapTicketModel.getFixedQuote() * DCF3;
-					System.out.println("cashFlow: " + cashFlow3);
+					double cashFlow3 = swapTicketModelObject.getNotional() * swapTicketModelObject.getFixedQuote() * DCF3;
+					System.out.println("cashFlow: " + SwapTicketFloat.RoundingOff(cashFlow3));
 
-					double Zcdf3 = Math.exp(-1 * DCF3 * SwapTicketModel.getFixedQuote());
+					double Zcdf3 = Math.exp(-1 * DCF3 * swapTicketModelObject.getFixedQuote());
 					System.out.println("Zcdf: " + Zcdf3);
 
 					double PV3 = Math.round((cashFlow1 * Zcdf3) * 100d) / 100d;
-					System.out.println("third PV: " + PV3 + "\n");
+					System.out.println("third PV: " + SwapTicketFloat.RoundingOff(PV3) + "\n");
 					
 					
 					/*
@@ -239,27 +249,27 @@ package com.derivatives.swapticket;
 					System.out.println("couponStartDate : " + requiredDateFormat(thirdNextDate));
 					LocalDate fourthNextDate = nextDate(thirdNextDate);
 					System.out.println("couponEndDate :" + requiredDateFormat(fourthNextDate));
-					System.out.println("Notional:" + SwapTicketModel.getNotional());
-					SwapTicketModel.setDBdefaultFixedQuote(1.5);
-					System.out.println("periodRate:" + SwapTicketModel.getDBdefaultFixedQuote());
+					System.out.println("Notional:" + swapTicketModelObject.getNotional());
+					swapTicketModelObject.setDBdefaultFixedQuote(1.5);
+					System.out.println("periodRate:" + SwapTicketFloat.RoundingOff(swapTicketModelObject.getDBdefaultFixedQuote()));
 
 					// int fourthDaysCount = 185;
 					countingNoOfDays(thirdNextDate, fourthNextDate);
-					System.out.println("number of days between:"+SwapTicketModel.getNoOfDays());
+					System.out.println("number of days between:"+swapTicketModelObject.getNoOfDays());
 
-					double DCF4 = ((double) SwapTicketModel.getNoOfDays() / (double) 360);
+					double DCF4 = ((double) swapTicketModelObject.getNoOfDays() / (double) 360);
 
-					double d4 = (double) Math.round(DCF4 * 100000d) / 100000d;
+					double d4 =SwapTicketFloat.RoundingOff(DCF4);
 					System.out.println("dcf:" + d4);
 
-					double cashFlow4 = SwapTicketModel.getNotional() * SwapTicketModel.getFixedQuote() * DCF4;
-					System.out.println("cashFlow: " + cashFlow4);
+					double cashFlow4 = swapTicketModelObject.getNotional() * swapTicketModelObject.getFixedQuote() * DCF4;
+					System.out.println("cashFlow: " + SwapTicketFloat.RoundingOff(cashFlow4));
 
-					double Zcdf4 = Math.exp(-1 * DCF4 * SwapTicketModel.getFixedQuote());
+					double Zcdf4 = Math.exp(-1 * DCF4 * swapTicketModelObject.getFixedQuote());
 					System.out.println("Zcdf: " + Zcdf4);
 
 					double PV4 = Math.round((cashFlow1 * Zcdf4) * 100d) / 100d;
-					System.out.println("fourth PV: " + PV4 + "\n");
+					System.out.println("fourth PV: " +  SwapTicketFloat.RoundingOff(PV4) + "\n");
 					
 					
 					/*
@@ -271,27 +281,27 @@ package com.derivatives.swapticket;
 					System.out.println("couponStartDate :" +requiredDateFormat(fourthNextDate));
 					LocalDate fifthNextDate = nextDate(fourthNextDate);
 					System.out.println("couponEndDate :" + requiredDateFormat(fifthNextDate));
-					System.out.println("Notional:" + SwapTicketModel.getNotional());
-					SwapTicketModel.setDBdefaultFixedQuote(1.6);
-					System.out.println("periodRate:" + SwapTicketModel.getDBdefaultFixedQuote());
+					System.out.println("Notional:" + swapTicketModelObject.getNotional());
+					swapTicketModelObject.setDBdefaultFixedQuote(1.6);
+					System.out.println("periodRate:" + SwapTicketFloat.RoundingOff(swapTicketModelObject.getDBdefaultFixedQuote()));
 
 					// int fifthDaysCount = 183;
 					countingNoOfDays(fourthNextDate, fifthNextDate);
-					System.out.println("number of days between:"+SwapTicketModel.getNoOfDays());
+					System.out.println("number of days between:"+swapTicketModelObject.getNoOfDays());
 
-					double DCF5 = ((double) SwapTicketModel.getNoOfDays() / (double) 360);
+					double DCF5 = ((double) swapTicketModelObject.getNoOfDays() / (double) 360);
 
-					double d5 = (double) Math.round(DCF5 * 100000d) / 100000d;
+					double d5 = SwapTicketFloat.RoundingOff(DCF5);
 					System.out.println("dcf:" + d5);
 
-					double cashFlow5 = SwapTicketModel.getNotional() * SwapTicketModel.getFixedQuote() * DCF5;
-					System.out.println("cashFlow: " + cashFlow5);
+					double cashFlow5 = swapTicketModelObject.getNotional() * swapTicketModelObject.getFixedQuote() * DCF5;
+					System.out.println("cashFlow: " + RoundingOff(cashFlow5));
 
-					double Zcdf5 = Math.exp(-1 * DCF5 * SwapTicketModel.getFixedQuote());
+					double Zcdf5 = Math.exp(-1 * DCF5 * swapTicketModelObject.getFixedQuote());
 					System.out.println("Zcdf: " + Zcdf5);
 
 					double PV5 = Math.round((cashFlow1 * Zcdf5) * 100d) / 100d;
-					System.out.println("fifth PV: " + PV5 + "\n");
+					System.out.println("fifth PV: " +  SwapTicketFloat.RoundingOff(PV5) + "\n");
 					
 					
 
@@ -304,27 +314,27 @@ package com.derivatives.swapticket;
 					System.out.println("couponStartDate:" + requiredDateFormat(fifthNextDate));
 					LocalDate sixthNextDate = nextDate(fifthNextDate);
 					System.out.println("couponEndDate :" + requiredDateFormat(sixthNextDate));
-					System.out.println("Notional:" + SwapTicketModel.getNotional());
-					SwapTicketModel.setDBdefaultFixedQuote(1.3);
-					System.out.println("periodRate:" + SwapTicketModel.getDBdefaultFixedQuote());
+					System.out.println("Notional:" + swapTicketModelObject.getNotional());
+					swapTicketModelObject.setDBdefaultFixedQuote(1.3);
+					System.out.println("periodRate:" + SwapTicketFloat.RoundingOff(swapTicketModelObject.getDBdefaultFixedQuote()));
 
 					// int sixDaysCount = 182;
 					countingNoOfDays(fifthNextDate, sixthNextDate);
-					System.out.println("number of days between:"+SwapTicketModel.getNoOfDays());
+					System.out.println("number of days between:"+swapTicketModelObject.getNoOfDays());
 
-					double DCF6 = ((double) SwapTicketModel.getNoOfDays() / (double) 360);
+					double DCF6 = ((double) swapTicketModelObject.getNoOfDays() / (double) 360);
 
-					double d6 = (double) Math.round(DCF6 * 100000d) / 100000d;
+					double d6 = SwapTicketFloat.RoundingOff(DCF6);
 					System.out.println("dcf:" + d6);
 
-					double cashFlow6 = SwapTicketModel.getNotional() * SwapTicketModel.getFixedQuote() * DCF6;
-					System.out.println("cashFlow: " + cashFlow6);
+					double cashFlow6 = swapTicketModelObject.getNotional() * swapTicketModelObject.getFixedQuote() * DCF6;
+					System.out.println("cashFlow: " + SwapTicketFloat.RoundingOff(cashFlow6));
 
-					double Zcdf6 = Math.exp(-1 * DCF6 * SwapTicketModel.getFixedQuote());
+					double Zcdf6 = Math.exp(-1 * DCF6 * swapTicketModelObject.getFixedQuote());
 					System.out.println("Zcdf: " + Zcdf6);
 
 					double PV6 = Math.round((cashFlow1 * Zcdf6) * 100d) / 100d;
-					System.out.println("sixth PV: " + PV6 + "\n");
+					System.out.println("sixth PV: " + SwapTicketFloat.RoundingOff(PV6) + "\n");
 
 					
 
@@ -356,5 +366,5 @@ package com.derivatives.swapticket;
 		}
 
 	}
-
+	
  
